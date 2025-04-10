@@ -1,0 +1,140 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  utorid     String    @unique
+  name       String
+  email      String    @unique
+  password   String?
+  role       Role      @default(REGULAR)
+  verified   Boolean   @default(false)
+  suspicious Boolean   @default(false)
+  birthday   DateTime?
+  avatarUrl  String?
+  createdAt  DateTime  @default(now())
+  lastLogin  DateTime?
+  points     Int       @default(0)
+
+  resetTokens  ResetToken[]
+  rsvps        RSVP[]
+  organized    Organizer[]
+  transactions Transaction[]
+  promotions   Promotion[]
+}
+
+model ResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+
+model TransactionPromotion {
+  id            Int         @id @default(autoincrement())
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId Int
+  promotion     Promotion   @relation(fields: [promotionId], references: [id])
+  promotionId   Int
+
+  @@unique([transactionId, promotionId])
+}
+
+model Transaction {
+  id         Int             @id @default(autoincrement())
+  type       TransactionType
+  amount     Int
+  spent      Float?
+  redeemed   Int?
+  remark     String?
+  suspicious Boolean         @default(false)
+  createdAt  DateTime        @default(now())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  relatedId  Int?
+  createdBy  String
+  promotions TransactionPromotion[]
+}
+
+model Event {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+  location      String
+  startTime     DateTime
+  endTime       DateTime
+  capacity      Int?
+  published     Boolean  @default(false)
+  pointsRemain  Int
+  pointsAwarded Int      @default(0)
+
+  rsvps      RSVP[]
+  organizers Organizer[]
+}
+
+model RSVP {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  @@unique([userId, eventId])
+}
+
+model Organizer {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  @@unique([userId, eventId])
+}
+
+model Promotion {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  type         PromotionType
+  startTime    DateTime
+  endTime      DateTime
+  points      Int
+  rate        Float?
+  minSpending Int?
+  used        Boolean @default(false)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  transactions TransactionPromotion[]
+}
+
+enum Role {
+  REGULAR
+  CASHIER
+  MANAGER
+  SUPERUSER
+}
+
+enum TransactionType {
+  purchase
+  adjustment
+  redemption
+  transfer
+  event
+}
+
+enum PromotionType {
+  automatic
+  one_time
+}

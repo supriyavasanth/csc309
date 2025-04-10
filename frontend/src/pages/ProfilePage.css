@@ -1,0 +1,110 @@
+/* Layout wrapper with fixed sidebar (220px) */
+.page-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #e2edff;
+}
+
+/* Main content with space for sidebar */
+.page-content {
+  flex: 1;
+  padding: 40px;
+  padding-left: 260px; /* Sidebar is fixed at 220px + 40px extra for spacing */
+  box-sizing: border-box;
+  background-color: #e2edff;
+}
+
+/* Page title */
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #222;
+}
+
+/* Profile details container */
+.profile-details {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-details p {
+  font-size: 16px;
+  margin: 12px 0;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.btn {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background-color: #14149c;
+  color: white;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: #0f0f7c;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-message {
+  margin-top: 15px;
+  color: #cc0000;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Responsive fix for small screens */
+@media (max-width: 768px) {
+  .page-layout {
+    flex-direction: column;
+  }
+
+  .page-content {
+    padding: 20px;
+    padding-left: 20px; /* No sidebar on small screens */
+    margin-left: 0;
+  }
+
+  .profile-details {
+    padding: 20px;
+    margin: 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+  }
+}

@@ -1,0 +1,54 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f0f4ff;
+  padding-left: 250px; /* matches sidebar width */
+}
+
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.welcome-heading {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.role-subheading {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.form-card {
+  background: white;
+  padding: 25px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.small-primary-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #14149c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.small-primary-btn:hover {
+  background-color: #0f0f7c;
+}
