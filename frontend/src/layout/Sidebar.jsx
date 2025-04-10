@@ -21,7 +21,11 @@ export default function Sidebar() {
         <Link to="/dashboard">Dashboard</Link>
 
         {(user.role === "CASHIER" || user.role === "MANAGER" || user.role === "SUPERUSER") && (
+          <>
           <Link to="/transactions">Transaction History</Link>
+          <Link to="/createTransaction">Transaction</Link>
+          <Link to="/processRedemption">Manual Transaction</Link>
+          </>
         )}
 
         {(user.role === "MANAGER" || user.role === "SUPERUSER") && (

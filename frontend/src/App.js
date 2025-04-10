@@ -29,6 +29,8 @@ import AvailablePromotionsPage from "./pages/ShowPromotions";
 import PublishedEventsPage from "./pages/ShowEvents";
 import EventRSVPPage from "./pages/RSVP";
 import TransactionHistory from "./pages/TransactionHistory";
+import CreateTransactionPage from "./pages/CreateTransaction";
+import ProcessRedemption from "./pages/ProcessRedemption";
 
 axios.defaults.withCredentials = true;
 
@@ -85,6 +87,8 @@ function App() {
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="*" element={<LoginPage />} />
           <Route path="/transactions" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><TransactionPage /></Layout></ProtectedRoute>} />
+          <Route path="/createTransaction" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><CreateTransactionPage /></Layout></ProtectedRoute>} />
+          <Route path="/processRedemption" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><ProcessRedemption /></Layout></ProtectedRoute>} />
           <Route path="/createPromotions" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><CreatePromotions /></Layout></ProtectedRoute>} />
           <Route path="/transactionManagement" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><TransactionManagement /></Layout></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}> <Layout><UserManagement /></Layout></ProtectedRoute>} />

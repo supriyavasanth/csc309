@@ -6,7 +6,16 @@ import Sidebar from "../layout/Sidebar";
 export default function TransactionHistory() {
   const { token } = useAuth();
   const [transactions, setTransactions] = useState([]);
-  const [typeFilter, setTypeFilter] = useState("");
+  const [filters, setFilters] = useState({
+    name: "",
+    type: "",
+    createdBy: "",
+    suspicious: "",
+    promotionId: "",
+    relatedId: "",
+    amount: "",
+    operator: "",
+  });
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
@@ -14,13 +23,20 @@ export default function TransactionHistory() {
 
   const fetchTransactions = async () => {
     try {
+      const params = {
+        ...filters,
+        page,
+        limit,
+        sortBy,
+      };
+
+      // Remove empty filters
+      Object.keys(params).forEach((key) => {
+        if (params[key] === "") delete params[key];
+      });
+
       const res = await axios.get("http://localhost:8000/users/me/transactions", {
-        params: {
-          type: typeFilter || undefined,
-          page,
-          limit,
-          sortBy,
-        },
+        params,
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -34,10 +50,11 @@ export default function TransactionHistory() {
 
   useEffect(() => {
     fetchTransactions();
-  }, [typeFilter, page, sortBy]);
+  }, [filters, page, sortBy]);
 
-  const handleTypeChange = (e) => {
-    setTypeFilter(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
     setPage(1);
   };
 
@@ -50,13 +67,27 @@ export default function TransactionHistory() {
         <h2 className="title">Your Transaction History</h2>
 
         <div className="filters">
-          <label>Filter by type: </label>
-          <select value={typeFilter} onChange={handleTypeChange}>
-            <option value="">All</option>
+          <input name="name" placeholder="Name or UTORid" onChange={handleChange} />
+          <input name="createdBy" placeholder="Created By" onChange={handleChange} />
+          <select name="suspicious" onChange={handleChange}>
+            <option value="">Suspicious?</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+          <input name="promotionId" type="number" placeholder="Promotion ID" onChange={handleChange} />
+          <input name="relatedId" type="number" placeholder="Related ID" onChange={handleChange} />
+          <select name="type" value={filters.type} onChange={handleChange}>
+            <option value="">All Types</option>
             <option value="earn">Earn</option>
             <option value="redeem">Redeem</option>
             <option value="transfer">Transfer</option>
             <option value="event">Event</option>
+          </select>
+          <input name="amount" type="number" placeholder="Point amount" onChange={handleChange} />
+          <select name="operator" onChange={handleChange}>
+            <option value="">Select Operator</option>
+            <option value="gte">≥</option>
+            <option value="lte">≤</option>
           </select>
         </div>
 
@@ -69,14 +100,12 @@ export default function TransactionHistory() {
                 <p><strong>Type:</strong> {t.type}</p>
                 <p><strong>Points:</strong> {t.points}</p>
                 {t.type === "transfer" && (
-                  <p>
-                    <strong>{t.direction === "outgoing" ? "To" : "From"}:</strong> {t.otherUserName} ({t.otherUserUtorid})
-                  </p>
+                  <p><strong>{t.direction === "outgoing" ? "To" : "From"}:</strong> {t.otherUserName} ({t.otherUserUtorid})</p>
                 )}
-                {t.type === "event" && (
-                  <p><strong>Event ID:</strong> {t.relatedId}</p>
-                )}
+                {t.type === "event" && <p><strong>Event ID:</strong> {t.relatedId}</p>}
                 {t.remark && <p><strong>Note:</strong> {t.remark}</p>}
+                {t.promotionId && <p><strong>Promo ID:</strong> {t.promotionId}</p>}
+                {t.suspicious && <p style={{ color: "red" }}><strong>⚠️ Suspicious</strong></p>}
                 <p><strong>Date:</strong> {new Date(t.createdAt).toLocaleDateString()}</p>
               </div>
             ))}
