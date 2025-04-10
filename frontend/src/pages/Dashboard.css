@@ -1,54 +1,109 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f0f4ff;
-  padding-left: 250px; /* matches sidebar width */
+  background-color: #f2f6fd;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #fff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
 }
 
 .dashboard-content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px;
-  box-sizing: border-box;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
 }
 
 .welcome-heading {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .role-subheading {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: #666;
-  margin-bottom: 20px;
 }
 
-.form-card {
-  background: white;
-  padding: 25px;
-  margin: 20px 0;
-  width: 100%;
-  max-width: 700px;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+.dashboard-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.card {
+  flex: 1 1 300px;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  min-height: 200px;
+}
+
+.info-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.list > div {
+  font-size: 1rem;
+  color: #222;
+}
+
+.muted {
+  color: #777;
+  font-style: italic;
+  margin-top: 1rem;
 }
 
 .small-primary-btn {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: #14149c;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #1202dd;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .small-primary-btn:hover {
-  background-color: #0f0f7c;
+  background-color: #0f00c5;
+}
+
+.form-card {
+  margin-top: 1rem;
 }
