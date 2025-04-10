@@ -54,6 +54,8 @@ export default function UserList() {
     if (editForm.verified !== "") payload.verified = editForm.verified === "true";
     if (editForm.role) payload.role = editForm.role.toUpperCase();
 
+    console.log("Updating user:", id, "with data:", payload);
+
     try {
       await axios.patch(`http://localhost:8000/users/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },

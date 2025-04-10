@@ -8,12 +8,13 @@ export default function CreatePromotion() {
 
   const [form, setForm] = useState({
     name: "",
-    type: "FLAT",
-    points: "",
-    rate: "",
-    minSpending: "",
+    description: "",
+    type: "automatic",
     startTime: "",
-    endTime: ""
+    endTime: "",
+    minSpending: "",
+    rate: "",
+    points: ""
   });
 
   const [message, setMessage] = useState("");
@@ -27,20 +28,35 @@ export default function CreatePromotion() {
     e.preventDefault();
     setMessage("");
 
+    const payload = {
+      name: form.name,
+      description: form.description,
+      type: form.type,
+      startTime: form.startTime,
+      endTime: form.endTime,
+    };
+
+    // Optional fields
+    if (form.minSpending) payload.minSpending = Number(form.minSpending);
+    if (form.rate) payload.rate = Number(form.rate);
+    if (form.points) payload.points = parseInt(form.points);
+
     try {
-      await axios.post("http://localhost:8000/promotions", form, {
+      await axios.post("http://localhost:8000/promotions", payload, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });
+
       setMessage("Promotion created successfully!");
       setForm({
         name: "",
-        type: "FLAT",
-        points: "",
-        rate: "",
-        minSpending: "",
+        description: "",
+        type: "automatic",
         startTime: "",
-        endTime: ""
+        endTime: "",
+        minSpending: "",
+        rate: "",
+        points: ""
       });
     } catch (err) {
       console.error("Failed to create promotion:", err);
@@ -55,47 +71,29 @@ export default function CreatePromotion() {
         <h2 className="title">Create Promotion</h2>
 
         <form className="promotion-form" onSubmit={handleSubmit}>
-          <label>Promotion Name</label>
-          <input name="name" value={form.name} onChange={handleChange} required />
-
-          <label>Type</label>
-          <select name="type" value={form.type} onChange={handleChange}>
-            <option value="FLAT">FLAT</option>
-            <option value="BONUS">BONUS</option>
-            <option value="BOOST">BOOST</option>
-          </select>
-
-          <label>Points</label>
+          <label>Promotion Name *</label>
           <input
-            type="number"
-            name="points"
-            value={form.points}
-            onChange={handleChange}
-            placeholder="Flat points (if FLAT)"
-          />
-
-          <label>Rate (0-1)</label>
-          <input
-            type="number"
-            name="rate"
-            value={form.rate}
-            onChange={handleChange}
-            step="0.01"
-            min="0"
-            max="1"
-            placeholder="Rate (e.g., 0.25 for 25%)"
-          />
-
-          <label>Minimum Spending</label>
-          <input
-            type="number"
-            name="minSpending"
-            value={form.minSpending}
+            name="name"
+            value={form.name}
             onChange={handleChange}
             required
           />
 
-          <label>Start Time</label>
+          <label>Description *</label>
+          <input
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Type *</label>
+          <select name="type" value={form.type} onChange={handleChange} required>
+            <option value="automatic">Automatic</option>
+            <option value="one-time">One-Time</option>
+          </select>
+
+          <label>Start Time *</label>
           <input
             type="datetime-local"
             name="startTime"
@@ -104,13 +102,42 @@ export default function CreatePromotion() {
             required
           />
 
-          <label>End Time</label>
+          <label>End Time *</label>
           <input
             type="datetime-local"
             name="endTime"
             value={form.endTime}
             onChange={handleChange}
             required
+          />
+
+          <label>Minimum Spending (optional)</label>
+          <input
+            type="number"
+            name="minSpending"
+            value={form.minSpending}
+            onChange={handleChange}
+            min="0"
+          />
+
+          <label>Rate (optional, 0-1)</label>
+          <input
+            type="number"
+            name="rate"
+            value={form.rate}
+            onChange={handleChange}
+            step="0.01"
+            min="0"
+            max="1"
+          />
+
+          <label>Bonus Points (optional)</label>
+          <input
+            type="number"
+            name="points"
+            value={form.points}
+            onChange={handleChange}
+            min="0"
           />
 
           <button className="btn btn-primary full-width" type="submit">
