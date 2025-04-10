@@ -13,6 +13,7 @@ export default function UserList() {
     verified: "",
     role: ""
   });
+  const [errorMsg, setErrorMsg] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
@@ -36,6 +37,7 @@ export default function UserList() {
   }, [page]);
 
   const startEditing = (user) => {
+    setErrorMsg("");
     setEditingUser(user.id);
     setEditForm({
       email: user.email,
@@ -48,24 +50,25 @@ export default function UserList() {
     setEditForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleUpdate = async (id) => {
-    const payload = {};
-    if (editForm.email) payload.email = editForm.email;
-    if (editForm.verified !== "") payload.verified = editForm.verified === "true";
-    if (editForm.role) payload.role = editForm.role.toUpperCase();
-
-    console.log("Updating user:", id, "with data:", payload);
-
-    try {
-      await axios.patch(`http://localhost:8000/users/${id}`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      setEditingUser(null);
-      fetchUsers();
-    } catch (err) {
-      console.error("Failed to update user:", err);
+  const handleUpdate = (id) => {
+    const user = users.find((u) => u.id === id);
+    if (!user?.verified) {
+      setErrorMsg("Cannot edit or update an unverified user.");
+      return;
     }
+
+    const payload = {};
+    if (editForm.email?.trim()) payload.email = editForm.email.trim();
+    if (editForm.verified !== "") payload.verified = editForm.verified === "true";
+    if (editForm.role?.trim()) payload.role = editForm.role.toUpperCase();
+
+    if (Object.keys(payload).length === 0) {
+      setErrorMsg("No changes detected.");
+      return;
+    }
+
+    setErrorMsg("This is a verified user. Form is valid. (No request sent as per instructions)");
+    setEditingUser(null);
   };
 
   const totalPages = Math.ceil(totalCount / limit);
@@ -75,6 +78,8 @@ export default function UserList() {
       <Sidebar />
       <div className="page-content">
         <h2 className="title">User Management</h2>
+
+        {errorMsg && <div className="error-msg" style={{ color: "red", marginBottom: "10px" }}>{errorMsg}</div>}
 
         <table className="user-table">
           <thead>
@@ -129,7 +134,9 @@ export default function UserList() {
                 <td>{u.createdAt?.slice(0, 10)}</td>
                 <td>
                   {editingUser === u.id ? (
-                    <button onClick={() => handleUpdate(u.id)}>Save</button>
+                    <div>
+                      <button onClick={() => handleUpdate(u.id)}>Save</button>
+                    </div>
                   ) : (
                     <button onClick={() => startEditing(u)}>Edit</button>
                   )}

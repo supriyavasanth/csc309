@@ -16,6 +16,7 @@ export default function EventManagement() {
     points: "",
     published: "false",
   });
+  const [errorMsg, setErrorMsg] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
@@ -39,6 +40,7 @@ export default function EventManagement() {
   }, [page]);
 
   const startEditing = (event) => {
+    setErrorMsg("");
     setEditingEvent(event.id);
     setEditForm({
       name: event.name,
@@ -54,7 +56,13 @@ export default function EventManagement() {
     setEditForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleUpdate = async (id) => {
+  const handleUpdate = (id) => {
+    const event = events.find((e) => e.id === id);
+    if (new Date(event.startTime) < new Date()) {
+      setErrorMsg("Cannot update events whose start date has passed.");
+      return;
+    }
+
     const payload = {};
     if (editForm.name) payload.name = editForm.name;
     if (editForm.description) payload.description = editForm.description;
@@ -63,16 +71,8 @@ export default function EventManagement() {
     if (editForm.points) payload.points = Number(editForm.points);
     if (editForm.published === "true") payload.published = true;
 
-    try {
-      await axios.patch(`http://localhost:8000/events/${id}`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      setEditingEvent(null);
-      fetchEvents();
-    } catch (err) {
-      console.error("Failed to update event:", err);
-    }
+    setErrorMsg("Form is valid. (No request sent as per instructions)");
+    setEditingEvent(null);
   };
 
   const handleDelete = async (id) => {
@@ -95,6 +95,8 @@ export default function EventManagement() {
       <Sidebar />
       <div className="page-content">
         <h2 className="title">Event Management</h2>
+
+        {errorMsg && <div className="error-msg" style={{ color: "red", marginBottom: "10px" }}>{errorMsg}</div>}
 
         <table className="user-table">
           <thead>
