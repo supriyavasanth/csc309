@@ -15,22 +15,16 @@ import PromotionsPage from "./pages/PromotionsPage";
 import EventsPage from "./pages/EventsPage";
 import UserList from "./pages/UserList";
 import CreatePromotions from "./pages/CreatePromotions";
-import PromotionManagement from "./pages/PromotionManagement";
 import CreateEvents from "./pages/CreateEvents";
 import EventManagement from "./pages/EventManagement";
 import EventUserManagement from "./pages/EventUserManagement";
-import QRCodePage from "./pages/QRCodePage";
 import "./App.css";
 import AvailablePoints from "./pages/AvailablePoints";
 import ManualTransferPage from "./pages/ManualTransfer";
-import RedeemPointsPage from "./pages/RedemptionRequest";
-import RedemptionQRCodePage from "./pages/RedeemQR";
 import AvailablePromotionsPage from "./pages/ShowPromotions";
 import PublishedEventsPage from "./pages/ShowEvents";
 import EventRSVPPage from "./pages/RSVP";
-import TransactionHistory from "./pages/TransactionHistory";
 import CreateTransactionPage from "./pages/CreateTransaction";
-import ProcessRedemption from "./pages/ProcessRedemption";
 
 axios.defaults.withCredentials = true;
 
@@ -88,25 +82,19 @@ function App() {
           <Route path="*" element={<LoginPage />} />
           <Route path="/transactions" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><TransactionPage /></Layout></ProtectedRoute>} />
           <Route path="/createTransaction" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><CreateTransactionPage /></Layout></ProtectedRoute>} />
-          <Route path="/processRedemption" element={<ProtectedRoute allowedRoles={["CASHIER", "MANAGER", "SUPERUSER"]}><Layout><ProcessRedemption /></Layout></ProtectedRoute>} />
           <Route path="/createPromotions" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><CreatePromotions /></Layout></ProtectedRoute>} />
           <Route path="/transactionManagement" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><TransactionManagement /></Layout></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}> <Layout><UserManagement /></Layout></ProtectedRoute>} />
           <Route path="/promotions" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><PromotionsPage /></Layout></ProtectedRoute>} />
-          <Route path="/promotionManagement" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><PromotionManagement /></Layout></ProtectedRoute>} />
           <Route path="/createEvents" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><CreateEvents /></Layout></ProtectedRoute>} />
           <Route path="/events" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><EventsPage /></Layout></ProtectedRoute>} />
           <Route path="/eventManagement" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><EventManagement /></Layout></ProtectedRoute>} />
           <Route path="/eventUserManagement" element={<ProtectedRoute allowedRoles={["MANAGER", "SUPERUSER"]}><Layout><EventUserManagement /></Layout></ProtectedRoute>} />
           <Route path="/points" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><AvailablePoints /></Layout></ProtectedRoute>} />
-          <Route path="/qr" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><QRCodePage /></Layout></ProtectedRoute>} />
           <Route path="/manualTransfer" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><ManualTransferPage /></Layout></ProtectedRoute>} />
-          <Route path="/redeem" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><RedeemPointsPage /></Layout></ProtectedRoute>} />
-          <Route path="/redeemQR" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><RedemptionQRCodePage /></Layout></ProtectedRoute>} />
           <Route path="/showPromotions" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><AvailablePromotionsPage /></Layout></ProtectedRoute>} />
           <Route path="/showEvents" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><PublishedEventsPage /></Layout></ProtectedRoute>} />
           <Route path="/RSVP" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><EventRSVPPage /></Layout></ProtectedRoute>} />
-          <Route path="/transactionHistory" element={<ProtectedRoute allowedRoles={["REGULAR", "CASHIER", "MANAGER", "SUPERUSER"]}><Layout><TransactionHistory /></Layout></ProtectedRoute>} />
         </Routes>
       </Router>
     </AuthProvider>

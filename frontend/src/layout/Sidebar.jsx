@@ -22,20 +22,14 @@ export default function Sidebar() {
 
         <Link to="/profile">Profile</Link>
         <Link to="/points">Points</Link>
-        <Link to="/qr">QR Code</Link>
         <Link to="/manualTransfer">Manual Transaction</Link>
-        <Link to="/redeem">Redemption Request</Link>
-        <Link to="/redeemQR">QR Redemption Requests</Link>
         <Link to="/showPromotions">Promotions</Link>
         <Link to="/showEvents">Events</Link>
         <Link to="/RSVP">RSVP</Link>
-        <Link to="/transactionHistory">Transaction History</Link>
-
         
         {(user.role === "CASHIER" || user.role === "MANAGER" || user.role === "SUPERUSER") && (
           <>
           <Link to="/createTransaction">Create Transaction</Link>
-          <Link to="/processRedemption">Manual Redemption</Link>
           </>
         )}
 
@@ -49,7 +43,6 @@ export default function Sidebar() {
             <Link to="/events">Filter Events</Link>
             <Link to="/createEvents">Create Events</Link>
             <Link to="/transactionManagement">Transaction Management</Link>
-            <Link to="/promotionManagement">Promotion Management</Link>
             <Link to="/eventManagement">Event Management</Link>
             <Link to="/eventUserManagement">Event User Management</Link>
           </>
