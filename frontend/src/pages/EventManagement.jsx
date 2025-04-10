@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
 import { useAuth } from "../context/useAuth";
-import "./UserList.css";
+import "./Dashboard.css";
 
 export default function EventManagement() {
   const { token } = useAuth();
@@ -91,120 +91,123 @@ export default function EventManagement() {
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Event Management</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Event Management</h1>
+          <h4 className="role-subheading">Edit, publish, or delete events</h4>
+        </div>
 
-        {errorMsg && <div className="error-msg" style={{ color: "red", marginBottom: "10px" }}>{errorMsg}</div>}
+        <div className="dashboard-body">
+          <div className="info-card">
+            {errorMsg && <p className="muted" style={{ color: "red" }}>{errorMsg}</p>}
 
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Location</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Capacity</th>
-              <th>Points</th>
-              <th>Published</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((e) => (
-              <tr key={e.id}>
-                <td>
-                  {editingEvent === e.id ? (
-                    <input
-                      name="name"
-                      value={editForm.name}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    e.name
-                  )}
-                </td>
-                <td>
-                  {editingEvent === e.id ? (
-                    <input
-                      name="location"
-                      value={editForm.location}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    e.location
-                  )}
-                </td>
-                <td>{e.startTime?.slice(0, 10)}</td>
-                <td>{e.endTime?.slice(0, 10)}</td>
-                <td>
-                  {editingEvent === e.id ? (
-                    <input
-                      name="capacity"
-                      type="number"
-                      value={editForm.capacity}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    e.capacity ?? "∞"
-                  )}
-                </td>
-                <td>
-                  {editingEvent === e.id ? (
-                    <input
-                      name="points"
-                      type="number"
-                      value={editForm.points}
-                      onChange={handleEditChange}
-                    />
-                  ) : (
-                    e.pointsRemain
-                  )}
-                </td>
-                <td>
-                  {editingEvent === e.id ? (
-                    e.published ? (
-                      "Yes"
-                    ) : (
-                      <select
-                        name="published"
-                        value={editForm.published}
-                        onChange={handleEditChange}
-                      >
-                        <option value="false">No</option>
-                        <option value="true">Yes</option>
-                      </select>
-                    )
-                  ) : e.published ? (
-                    "Yes"
-                  ) : (
-                    "No"
-                  )}
-                </td>
-                <td>
-                  {editingEvent === e.id ? (
-                    <button onClick={() => handleUpdate(e.id)}>Save</button>
-                  ) : (
-                    <>
-                      <button onClick={() => startEditing(e)}>Edit</button>
-                      <button onClick={() => handleDelete(e.id)}>Delete</button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Capacity</th>
+                  <th>Points</th>
+                  <th>Published</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((e) => (
+                  <tr key={e.id}>
+                    <td>
+                      {editingEvent === e.id ? (
+                        <input
+                          name="name"
+                          value={editForm.name}
+                          onChange={handleEditChange}
+                        />
+                      ) : (
+                        e.name
+                      )}
+                    </td>
+                    <td>
+                      {editingEvent === e.id ? (
+                        <input
+                          name="location"
+                          value={editForm.location}
+                          onChange={handleEditChange}
+                        />
+                      ) : (
+                        e.location
+                      )}
+                    </td>
+                    <td>{e.startTime?.slice(0, 10)}</td>
+                    <td>{e.endTime?.slice(0, 10)}</td>
+                    <td>
+                      {editingEvent === e.id ? (
+                        <input
+                          name="capacity"
+                          type="number"
+                          value={editForm.capacity}
+                          onChange={handleEditChange}
+                        />
+                      ) : (
+                        e.capacity ?? "∞"
+                      )}
+                    </td>
+                    <td>
+                      {editingEvent === e.id ? (
+                        <input
+                          name="points"
+                          type="number"
+                          value={editForm.points}
+                          onChange={handleEditChange}
+                        />
+                      ) : (
+                        e.pointsRemain
+                      )}
+                    </td>
+                    <td>
+                      {editingEvent === e.id ? (
+                        e.published ? (
+                          "Yes"
+                        ) : (
+                          <select
+                            name="published"
+                            value={editForm.published}
+                            onChange={handleEditChange}
+                          >
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                          </select>
+                        )
+                      ) : e.published ? "Yes" : "No"}
+                    </td>
+                    <td>
+                      {editingEvent === e.id ? (
+                        <button onClick={() => handleUpdate(e.id)}>Save</button>
+                      ) : (
+                        <>
+                          <button onClick={() => startEditing(e)}>Edit</button>
+                          <button onClick={() => handleDelete(e.id)}>Delete</button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-        <div className="pagination">
-          <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>
-            Previous
-          </button>
-          <span>Page {page} of {totalPages}</span>
-          <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
-            Next
-          </button>
+            <div className="pagination">
+              <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>
+                Previous
+              </button>
+              <span>Page {page} of {totalPages}</span>
+              <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

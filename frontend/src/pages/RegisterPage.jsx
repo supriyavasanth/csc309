@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import Sidebar from "../layout/Sidebar";
+import "./Dashboard.css";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function RegisterPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Cashier+ must be logged in
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           utorid,
@@ -57,67 +58,72 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-box">
-        <div className="title">Register New User</div>
-        <div className="subtitle">For Cashiers and Managers</div>
-
-        <div className="form-group">
-          <label className="form-label">UTORid</label>
-          <input
-            className="form-control"
-            name="utorid"
-            placeholder="e.g., johndoe"
-            value={formData.utorid}
-            onChange={handleChange}
-          />
+    <div className="dashboard-container">
+      <Sidebar />
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Register New User</h1>
+          <h4 className="role-subheading">For Cashiers and Managers</h4>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">Full Name</label>
-          <input
-            className="form-control"
-            name="name"
-            placeholder="John Doe"
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <div className="info-card">
+          <div className="form-group">
+            <label className="form-label">UTORid</label>
+            <input
+              className="form-control"
+              name="utorid"
+              placeholder="e.g., johndoe"
+              value={formData.utorid}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Full Name</label>
+            <input
+              className="form-control"
+              name="name"
+              placeholder="John Doe"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              placeholder="johndoe@mail.utoronto.ca"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+
+          {error && <p className="error-message">{error}</p>}
+
+          <button className="btn btn-primary full-width" onClick={handleRegister}>
+            Create Account
+          </button>
+
+          <p className="signup-text" style={{ marginTop: "1rem" }}>
+            Already registered?
+            <a href="/login" className="bluelink"> Back to Login</a>
+          </p>
         </div>
-
-        <div className="form-group">
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            name="email"
-            placeholder="johndoe@mail.utoronto.ca"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-
-        {error && <p className="error-message">{error}</p>}
-
-        <button className="btn btn-primary full-width" onClick={handleRegister}>
-          Create Account
-        </button>
-
-        <p className="signup-text">
-          Already registered?
-          <a href="/login" className="bluelink"> Back to Login</a>
-        </p>
       </div>
     </div>
   );

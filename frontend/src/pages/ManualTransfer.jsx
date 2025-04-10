@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/useAuth";
 import Sidebar from "../layout/Sidebar";
 import axios from "axios";
-import "./Login.css";
+import "./Dashboard.css";
 
 export default function ManualTransferPage() {
   const { token } = useAuth();
@@ -41,33 +41,38 @@ export default function ManualTransferPage() {
   };
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Manual Point Transfer</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Manual Point Transfer</h1>
+          <h4 className="role-subheading">Send points to another user manually</h4>
+        </div>
 
-        <div className="form-card">
-          <label>Recipient UTORid:</label>
-          <input
-            type="text"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            placeholder="e.g. johndoe1"
-          />
+        <div className="dashboard-body">
+          <div className="info-card">
+            <label>Recipient UTORid:</label>
+            <input
+              type="text"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+              placeholder="e.g. johndoe1"
+            />
 
-          <label>Points to Transfer:</label>
-          <input
-            type="number"
-            value={points}
-            onChange={(e) => setPoints(e.target.value)}
-            placeholder="e.g. 50"
-          />
+            <label>Points to Transfer:</label>
+            <input
+              type="number"
+              value={points}
+              onChange={(e) => setPoints(e.target.value)}
+              placeholder="e.g. 50"
+            />
 
-          <button className="small-primary-btn" onClick={handleTransfer}>
-            Submit Transfer
-          </button>
+            <button className="small-primary-btn" onClick={handleTransfer}>
+              Submit Transfer
+            </button>
 
-          {message && <p className="info-message">{message}</p>}
+            {message && <p className="info-message">{message}</p>}
+          </div>
         </div>
       </div>
     </div>

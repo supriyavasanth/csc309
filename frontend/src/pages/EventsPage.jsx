@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
 import { useAuth } from "../context/useAuth";
+import "./Dashboard.css";
 
 export default function EventList() {
   const { token } = useAuth();
@@ -50,56 +51,63 @@ export default function EventList() {
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Events</h2>
-
-        <div className="filters">
-          <input name="name" placeholder="Search by name" onChange={handleChange} />
-          <input name="location" placeholder="Search by location" onChange={handleChange} />
-          <select name="published" onChange={handleChange}>
-            <option value="">Published?</option>
-            <option value="true">Published</option>
-            <option value="false">Unpublished</option>
-          </select>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Events</h1>
+          <h4 className="role-subheading">Browse and filter upcoming and past events</h4>
         </div>
 
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th onClick={() => handleSort("name")}>Name</th>
-              <th onClick={() => handleSort("location")}>Location</th>
-              <th onClick={() => handleSort("startTime")}>Start</th>
-              <th onClick={() => handleSort("endTime")}>End</th>
-              <th onClick={() => handleSort("capacity")}>Capacity</th>
-              <th onClick={() => handleSort("pointsRemain")}>Points Left</th>
-              <th onClick={() => handleSort("published")}>Published</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((e) => (
-              <tr key={e.id}>
-                <td>{e.name}</td>
-                <td>{e.location}</td>
-                <td>{e.startTime?.slice(0, 16).replace("T", " ")}</td>
-                <td>{e.endTime?.slice(0, 16).replace("T", " ")}</td>
-                <td>{e.capacity ?? "∞"}</td>
-                <td>{e.pointsRemain}</td>
-                <td>{e.published ? "Yes" : "No"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="dashboard-body">
+          <div className="info-card">
+            <div className="filters" style={{ marginBottom: "1rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <input name="name" placeholder="Search by name" onChange={handleChange} />
+              <input name="location" placeholder="Search by location" onChange={handleChange} />
+              <select name="published" onChange={handleChange}>
+                <option value="">Published?</option>
+                <option value="true">Published</option>
+                <option value="false">Unpublished</option>
+              </select>
+            </div>
 
-        <div className="pagination">
-          <button onClick={() => setPage(p => Math.max(p - 1, 1))} disabled={page === 1}>
-            Previous
-          </button>
-          <span>Page {page} of {totalPages}</span>
-          <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>
-            Next
-          </button>
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th onClick={() => handleSort("name")}>Name</th>
+                  <th onClick={() => handleSort("location")}>Location</th>
+                  <th onClick={() => handleSort("startTime")}>Start</th>
+                  <th onClick={() => handleSort("endTime")}>End</th>
+                  <th onClick={() => handleSort("capacity")}>Capacity</th>
+                  <th onClick={() => handleSort("pointsRemain")}>Points Left</th>
+                  <th onClick={() => handleSort("published")}>Published</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((e) => (
+                  <tr key={e.id}>
+                    <td>{e.name}</td>
+                    <td>{e.location}</td>
+                    <td>{e.startTime?.slice(0, 16).replace("T", " ")}</td>
+                    <td>{e.endTime?.slice(0, 16).replace("T", " ")}</td>
+                    <td>{e.capacity ?? "∞"}</td>
+                    <td>{e.pointsRemain}</td>
+                    <td>{e.published ? "Yes" : "No"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="pagination">
+              <button onClick={() => setPage(p => Math.max(p - 1, 1))} disabled={page === 1}>
+                Previous
+              </button>
+              <span>Page {page} of {totalPages}</span>
+              <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/useAuth";
 import Sidebar from "../layout/Sidebar";
+import "./Dashboard.css";
 
 export default function PromotionDetail() {
   const { token } = useAuth();
@@ -76,49 +77,56 @@ export default function PromotionDetail() {
 
   if (!promotion) {
     return (
-      <div className="page-layout">
+      <div className="dashboard-container">
         <Sidebar />
-        <div className="page-content"><p>Loading...</p></div>
+        <div className="dashboard-content"><p>Loading...</p></div>
       </div>
     );
   }
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Promotion #{promotion.id}</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Promotion #{promotion.id}</h1>
+          <h4 className="role-subheading">Edit or delete this promotion</h4>
+        </div>
 
-        <div className="promotion-detail-form">
-          <label>Name</label>
-          <input name="name" value={form.name} onChange={handleChange} />
+        <div className="dashboard-body">
+          <div className="info-card">
+            <label>Name</label>
+            <input name="name" value={form.name} onChange={handleChange} />
 
-          <label>Points</label>
-          <input name="points" type="number" value={form.points} onChange={handleChange} />
+            <label>Points</label>
+            <input name="points" type="number" value={form.points} onChange={handleChange} />
 
-          <label>Rate</label>
-          <input name="rate" type="number" value={form.rate} onChange={handleChange} />
+            <label>Rate</label>
+            <input name="rate" type="number" value={form.rate} onChange={handleChange} />
 
-          <label>Type</label>
-          <select name="type" value={form.type} onChange={handleChange}>
-            <option value="">Select Type</option>
-            <option value="BONUS">Bonus</option>
-            <option value="REWARD">Reward</option>
-            <option value="LIMITED">Limited</option>
-          </select>
+            <label>Type</label>
+            <select name="type" value={form.type} onChange={handleChange}>
+              <option value="">Select Type</option>
+              <option value="BONUS">Bonus</option>
+              <option value="REWARD">Reward</option>
+              <option value="LIMITED">Limited</option>
+            </select>
 
-          <label>Min Spending</label>
-          <input
-            name="minSpending"
-            type="number"
-            value={form.minSpending}
-            onChange={handleChange}
-          />
+            <label>Min Spending</label>
+            <input
+              name="minSpending"
+              type="number"
+              value={form.minSpending}
+              onChange={handleChange}
+            />
 
-          <button className="btn btn-primary" onClick={handleUpdate}>Update</button>
-          <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+            <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+              <button className="small-primary-btn" onClick={handleUpdate}>Update</button>
+              <button className="small-primary-btn" style={{ background: "#e63946" }} onClick={handleDelete}>Delete</button>
+            </div>
 
-          {message && <p className="info-message">{message}</p>}
+            {message && <p className="info-message">{message}</p>}
+          </div>
         </div>
       </div>
     </div>

@@ -27,25 +27,34 @@ export default function AvailablePoints() {
     fetchUserInfo();
   }, [token]);
 
-  if (loading) return <div className="page-layout"><Sidebar /><div className="page-content"><p>Loading...</p></div></div>;
-  if (!userData) return <div className="page-layout"><Sidebar /><div className="page-content"><p>Unable to load user data.</p></div></div>;
+  if (loading || !userData) {
+    return (
+      <div className="dashboard-container">
+        <Sidebar />
+        <div className="dashboard-content">
+          <p>{loading ? "Loading..." : "Unable to load user data."}</p>
+        </div>
+      </div>
+    );
+  }
 
-  const displayName = userData.name || userData.utorid;
+  const displayName = userData.name?.trim() || userData.utorid;
   const availablePoints = Number(userData.points) || 0;
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Available Points</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Welcome, {displayName}!</h1>
+          <h4 className="role-subheading">Points Summary</h4>
+        </div>
 
-        <div className="info-card">
-          <p>
-            Hello, <strong>{displayName}</strong>!
-          </p>
-          <p>
-            You currently have <strong>{availablePoints}</strong> points available.
-          </p>
+        <div className="dashboard-body">
+          <div className="info-card">
+            <h3>Available Points</h3>
+            <p className="big-number">{availablePoints} points</p>
+          </div>
         </div>
       </div>
     </div>

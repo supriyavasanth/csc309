@@ -74,10 +74,13 @@ export default function UserList() {
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">User Management</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">User Management</h1>
+          <h4 className="role-subheading">View, edit, and manage users</h4>
+        </div>
 
         {errorMsg && <div className="error-msg" style={{ color: "red", marginBottom: "10px" }}>{errorMsg}</div>}
 
@@ -134,9 +137,7 @@ export default function UserList() {
                 <td>{u.createdAt?.slice(0, 10)}</td>
                 <td>
                   {editingUser === u.id ? (
-                    <div>
-                      <button onClick={() => handleUpdate(u.id)}>Save</button>
-                    </div>
+                    <button onClick={() => handleUpdate(u.id)}>Save</button>
                   ) : (
                     <button onClick={() => startEditing(u)}>Edit</button>
                   )}

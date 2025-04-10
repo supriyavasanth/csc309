@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
 import { useAuth } from "../context/useAuth";
-import "./UserList.css";
+import "./Dashboard.css";
 
-export default function EventManagement() {
+export default function EventUserManagement() {
   const { token } = useAuth();
   const [events, setEvents] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
-  const [selectedUserIds, setSelectedUserIds] = useState({}); // per-event selected user to add
-  const [removeUserIds, setRemoveUserIds] = useState({}); // per-event selected user to remove
+  const [selectedUserIds, setSelectedUserIds] = useState({});
+  const [removeUserIds, setRemoveUserIds] = useState({});
 
   const fetchEvents = async () => {
     try {
@@ -59,7 +59,7 @@ export default function EventManagement() {
   const handleAddUser = async (eventId) => {
     const utorid = selectedUserIds[eventId];
     if (!utorid) return;
-  
+
     try {
       const res = await axios.post(
         `http://localhost:8000/events/${eventId}/guests`,
@@ -69,26 +69,20 @@ export default function EventManagement() {
           withCredentials: true,
         }
       );
-  
+
       const newGuest = res.data.guestAdded;
-  
-      setEvents((prevEvents) =>
-        prevEvents.map((e) =>
-          e.id === eventId
-            ? {
-                ...e,
-                guests: [...e.guests, newGuest],
-              }
-            : e
+
+      setEvents((prev) =>
+        prev.map((e) =>
+          e.id === eventId ? { ...e, guests: [...e.guests, newGuest] } : e
         )
       );
-  
+
       setSelectedUserIds((prev) => ({ ...prev, [eventId]: "" }));
     } catch (err) {
       console.error("Failed to add guest:", err);
     }
   };
-  
 
   const handleRemoveUser = async (eventId) => {
     const userId = removeUserIds[eventId];
@@ -107,84 +101,88 @@ export default function EventManagement() {
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Event Attendees Management</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Event Attendees Management</h1>
+          <h4 className="role-subheading">Add or remove guests for each event</h4>
+        </div>
 
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>Event Name</th>
-              <th>Attendees</th>
-              <th>Add User</th>
-              <th>Remove User</th>
-            </tr>
-          </thead>
-          <tbody>
-  {events.map((event) => {
-    const guestIds = new Set(event.guests.map((g) => g.id));
-    const notGuests = allUsers.filter((u) => !guestIds.has(u.id));
-    return (
-      <tr key={event.id}>
-        <td>{event.name}</td>
-        <td>{event.guests.length}</td> {/* Optional: show count of attendees */}
-        <td>
-          <select
-            value={selectedUserIds[event.id] || ""}
-            onChange={(e) =>
-              setSelectedUserIds((prev) => ({
-                ...prev,
-                [event.id]: e.target.value,
-              }))
-            }
-          >
-            <option value="">Select user</option>
-            {notGuests.map((u) => (
-              <option key={u.id} value={u.utorid}>
-                {u.name} ({u.utorid})
-              </option>
-            ))}
-          </select>
-          <button onClick={() => handleAddUser(event.id)}>Add</button>
-        </td>
-        <td>
-          <select
-            value={removeUserIds[event.id] || ""}
-            onChange={(e) =>
-              setRemoveUserIds((prev) => ({
-                ...prev,
-                [event.id]: e.target.value,
-              }))
-            }
-          >
-            <option value="">Select attendee</option>
-            {allUsers
-            .filter((u) => event.guests.some((g) => g.id === u.id))
-            .map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.name} ({u.utorid})
-              </option>
-          ))}
+        <div className="dashboard-body">
+          <div className="info-card">
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Attendees</th>
+                  <th>Add User</th>
+                  <th>Remove User</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((event) => {
+                  const guestIds = new Set(event.guests.map((g) => g.id));
+                  const notGuests = allUsers.filter((u) => !guestIds.has(u.id));
 
-          </select>
-          <button onClick={() => handleRemoveUser(event.id)}>Remove</button>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
+                  return (
+                    <tr key={event.id}>
+                      <td>{event.name}</td>
+                      <td>{event.guests.length}</td>
+                      <td>
+                        <select
+                          value={selectedUserIds[event.id] || ""}
+                          onChange={(e) =>
+                            setSelectedUserIds((prev) => ({
+                              ...prev,
+                              [event.id]: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="">Select user</option>
+                          {notGuests.map((u) => (
+                            <option key={u.id} value={u.utorid}>
+                              {u.name} ({u.utorid})
+                            </option>
+                          ))}
+                        </select>
+                        <button onClick={() => handleAddUser(event.id)}>Add</button>
+                      </td>
+                      <td>
+                        <select
+                          value={removeUserIds[event.id] || ""}
+                          onChange={(e) =>
+                            setRemoveUserIds((prev) => ({
+                              ...prev,
+                              [event.id]: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="">Select attendee</option>
+                          {event.guests.map((g) => (
+                            <option key={g.id} value={g.id}>
+                              {g.name} ({g.utorid})
+                            </option>
+                          ))}
+                        </select>
+                        <button onClick={() => handleRemoveUser(event.id)}>Remove</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
 
-        </table>
-
-        <div className="pagination">
-          <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>
-            Previous
-          </button>
-          <span>Page {page} of {totalPages}</span>
-          <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
-            Next
-          </button>
+            <div className="pagination">
+              <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>
+                Previous
+              </button>
+              <span>Page {page} of {totalPages}</span>
+              <button onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
-import "./ProfilePage.css";
+import "./Dashboard.css";
 
 export default function ProfilePage() {
   const { token } = useAuth();
@@ -16,7 +16,6 @@ export default function ProfilePage() {
   });
   const [message, setMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -70,21 +69,21 @@ export default function ProfilePage() {
     const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,20}$/.test(
       form.newPassword
     );
-  
+
     if (!form.oldPassword || !form.newPassword) {
       setMessage("Please fill in both password fields.");
       return;
     }
-  
+
     if (!passwordValid) {
       setPasswordError(
         "Password must include: 8–20 characters, at least one uppercase, one lowercase, one number, one special character"
       );
       return;
     } else {
-      setPasswordError(""); // clear previous error
+      setPasswordError("");
     }
-  
+
     try {
       await axios.patch(
         "http://localhost:8000/users/me/password",
@@ -109,13 +108,12 @@ export default function ProfilePage() {
       console.error(err);
     }
   };
-  
 
   if (!userInfo) {
     return (
-      <div className="page-layout">
+      <div className="dashboard-container">
         <Sidebar />
-        <div className="page-content">
+        <div className="dashboard-content">
           <h2 className="title">Profile Management</h2>
           <p>Loading...</p>
         </div>
@@ -124,76 +122,78 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Profile Management</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Profile Management</h1>
+          <h4 className="role-subheading">Edit your details and password</h4>
+        </div>
 
-        {!editMode ? (
-          <div className="profile-details">
-            <p><strong>Name:</strong> {userInfo.name}</p>
-            <p><strong>Email:</strong> {userInfo.email}</p>
-            <p><strong>Birthday:</strong> {userInfo.birthday?.slice(0, 10) || "Not set"}</p>
-            <button className="btn btn-primary" onClick={() => setEditMode(true)}>Edit</button>
+        <div className="dashboard-body">
+          <div className="info-card">
+            {!editMode ? (
+              <>
+                <p><strong>Name:</strong> {userInfo.name}</p>
+                <p><strong>Email:</strong> {userInfo.email}</p>
+                <p><strong>Birthday:</strong> {userInfo.birthday?.slice(0, 10) || "Not set"}</p>
+                <button className="small-primary-btn" onClick={() => setEditMode(true)}>Edit</button>
+              </>
+            ) : (
+              <>
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
+
+                <label>Email</label>
+                <input
+                  type="text"
+                  value={userInfo.email || ""}
+                  disabled
+                />
+
+                <label>Birthday</label>
+                <input
+                  type="date"
+                  name="birthday"
+                  value={form.birthday}
+                  onChange={handleChange}
+                />
+
+                <button className="small-primary-btn" onClick={handleProfileUpdate}>
+                  Save Changes
+                </button>
+
+                <label>Current Password</label>
+                <input
+                  type="password"
+                  name="oldPassword"
+                  value={form.oldPassword}
+                  onChange={handleChange}
+                />
+
+                <label>New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={form.newPassword}
+                  onChange={handleChange}
+                />
+                {passwordError && <p className="error-message">{passwordError}</p>}
+
+                <button className="small-primary-btn" onClick={handlePasswordUpdate}>
+                  Change Password
+                </button>
+              </>
+            )}
+
+            {message && <p className="info-message">{message}</p>}
           </div>
-        ) : (
-          <div className="profile-details">
-            <label>Name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-            />
-
-            <label>Email</label>
-            <input
-              type="text"
-              className="form-control"
-              value={userInfo.email || ""}
-              disabled
-            />
-
-            <label>Birthday</label>
-            <input
-              type="date"
-              className="form-control"
-              name="birthday"
-              value={form.birthday}
-              onChange={handleChange}
-            />
-
-            <button className="btn btn-primary full-width" onClick={handleProfileUpdate}>
-              Save Changes
-            </button>
-
-            <label>Current Password</label>
-            <input
-              type="password"
-              className="form-control"
-              name="oldPassword"
-              value={form.oldPassword}
-              onChange={handleChange}
-            />
-
-            <label>New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              className="form-control"
-              value={form.newPassword}
-              onChange={handleChange}
-            />
-            {passwordError && <p className="error-message">{passwordError}</p>}
-
-            <button className="btn btn-primary full-width" onClick={handlePasswordUpdate}>
-              Change Password
-            </button>
-          </div>
-        )}
-
-        {message && <p className="error-message">{message}</p>}
+        </div>
       </div>
     </div>
   );

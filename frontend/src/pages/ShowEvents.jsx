@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
 import { useAuth } from "../context/useAuth";
+import "./Dashboard.css";
 
 export default function PublishedEventsPage() {
   const { token } = useAuth();
@@ -25,24 +26,40 @@ export default function PublishedEventsPage() {
   }, [token]);
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Published Events</h2>
-        {events.length === 0 ? (
-          <p>No published events available.</p>
-        ) : (
-          <ul className="promotion-list">
-            {events.map((event) => (
-              <li key={event.id} className="info-card">
-                <h4>{event.name}</h4>
-                <p><strong>Location:</strong> {event.location}</p>
-                <p><strong>Start:</strong> {event.startTime?.slice(0, 10)}</p>
-                <p><strong>End:</strong> {event.endTime?.slice(0, 10)}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Published Events</h1>
+          <h4 className="role-subheading">Events open to all users</h4>
+        </div>
+
+        <div className="info-card">
+          {events.length === 0 ? (
+            <p className="muted">No published events available.</p>
+          ) : (
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Start</th>
+                  <th>End</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((event) => (
+                  <tr key={event.id}>
+                    <td>{event.name}</td>
+                    <td>{event.location}</td>
+                    <td>{event.startTime?.slice(0, 10)}</td>
+                    <td>{event.endTime?.slice(0, 10)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   );

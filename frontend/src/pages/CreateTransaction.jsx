@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuth";
 import axios from "axios";
 import Sidebar from "../layout/Sidebar";
+import "./Dashboard.css";
 
 export default function CreateTransactionPage() {
   const { token } = useAuth();
@@ -74,57 +75,63 @@ export default function CreateTransactionPage() {
   };
 
   return (
-    <div className="page-layout">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="page-content">
-        <h2 className="title">Create Purchase Transaction</h2>
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="welcome-heading">Create Purchase Transaction</h1>
+          <h4 className="role-subheading">Cashier Panel</h4>
+        </div>
 
-        <form className="form-card" onSubmit={handleSubmit}>
-          <label>Customer UTORid</label>
-          <input
-            name="utorid"
-            value={form.utorid}
-            onChange={handleChange}
-            required
-          />
+        <div className="dashboard-body">
+          <div className="info-card">
+            <form className="promotion-form" onSubmit={handleSubmit}>
+              <label>Customer UTORid</label>
+              <input
+                name="utorid"
+                value={form.utorid}
+                onChange={handleChange}
+                required
+              />
 
-          <label>Amount Spent ($)</label>
-          <input
-            name="spent"
-            type="number"
-            min="0.01"
-            step="0.01"
-            value={form.spent}
-            onChange={handleChange}
-            required
-          />
+              <label>Amount Spent ($)</label>
+              <input
+                name="spent"
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={form.spent}
+                onChange={handleChange}
+                required
+              />
 
-          <label>Apply Promotions (optional)</label>
-          <select
-            multiple
-            value={form.promotionIds.map((id) => id.toString())}
-            onChange={handlePromotionChange}
-          >
-            {promotions.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+              <label>Apply Promotions (optional)</label>
+              <select
+                multiple
+                value={form.promotionIds.map((id) => id.toString())}
+                onChange={handlePromotionChange}
+              >
+                {promotions.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
 
-          <label>Remark (optional)</label>
-          <input
-            name="remark"
-            value={form.remark}
-            onChange={handleChange}
-          />
+              <label>Remark (optional)</label>
+              <input
+                name="remark"
+                value={form.remark}
+                onChange={handleChange}
+              />
 
-          <button type="submit" className="btn btn-primary">Submit Transaction</button>
-        </form>
+              <button type="submit" className="small-primary-btn">Submit Transaction</button>
 
-        {message && <p className="info-message">{message}</p>}
+              {message && <p className="muted">{message}</p>}
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-    
