@@ -6,7 +6,7 @@ import Sidebar from "../layout/Sidebar";
 export default function PromotionList() {
   const { token } = useAuth();
   const [promotions, setPromotions] = useState([]);
-  const [filters, setFilters] = useState({ name: "", type: "" });
+  const [filters, setFilters] = useState({ name: "", type: "", minSpending: "" });
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
@@ -51,14 +51,24 @@ export default function PromotionList() {
       <div className="page-content">
         <h2 className="title">Promotions</h2>
 
-        <div className="filters">
+        <div className="filters" style={{ marginBottom: "1rem", display: "flex", gap: "1rem" }}>
           <input name="name" placeholder="Search name" onChange={handleChange} />
+
           <select name="type" onChange={handleChange}>
             <option value="">All Types</option>
-            <option value="BONUS">Bonus</option>
-            <option value="REWARD">Reward</option>
-            <option value="LIMITED">Limited</option>
+            <option value="automatic">Automatic</option>
+            <option value="one-time">One-time</option>
           </select>
+
+
+          <input
+            name="minSpending"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Min Spending"
+            onChange={handleChange}
+          />
         </div>
 
         <table className="user-table">
@@ -77,9 +87,9 @@ export default function PromotionList() {
               <tr key={p.id}>
                 <td>{p.name}</td>
                 <td>{p.type}</td>
-                <td>{p.points}</td>
-                <td>{p.rate}</td>
-                <td>${p.minSpending}</td>
+                <td>{p.points ?? "-"}</td>
+                <td>{p.rate ?? "-"}</td>
+                <td>{p.minSpending ? `$${p.minSpending}` : "-"}</td>
                 <td>{p.createdAt?.slice(0, 10)}</td>
               </tr>
             ))}

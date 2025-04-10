@@ -122,66 +122,59 @@ export default function EventManagement() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event) => {
-              const guestIds = new Set(event.guests.map((g) => g.id));
-              const guests = event.guests;
-              const notGuests = allUsers.filter((u) => !guestIds.has(u.id));
-              return (
-                <tr key={event.id}>
-                  <td>{event.name}</td>
-                  <td>
-                    {guests.length === 0 ? (
-                      <em>No attendees</em>
-                    ) : (
-                      <ul>
-                        {guests.map((g) => (
-                          <li key={g.id}>{g.name} ({g.utorid})</li>
-                        ))}
-                      </ul>
-                    )}
-                  </td>
-                  <td>
-                    <select
-                      value={selectedUserIds[event.id] || ""}
-                      onChange={(e) =>
-                        setSelectedUserIds((prev) => ({
-                          ...prev,
-                          [event.id]: e.target.value,
-                        }))
-                      }
-                    >
-                      <option value="">Select user</option>
-                      {notGuests.map((u) => (
-                        <option key={u.id} value={u.utorid}>
-                          {u.name} ({u.utorid})
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={() => handleAddUser(event.id)}>Add</button>
-                  </td>
-                  <td>
-                    <select
-                      value={removeUserIds[event.id] || ""}
-                      onChange={(e) =>
-                        setRemoveUserIds((prev) => ({
-                          ...prev,
-                          [event.id]: e.target.value,
-                        }))
-                      }
-                    >
-                      <option value="">Select attendee</option>
-                      {guests.map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.name} ({u.utorid})
-                        </option>
-                      ))}
-                    </select>
-                    <button onClick={() => handleRemoveUser(event.id)}>Remove</button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+  {events.map((event) => {
+    const guestIds = new Set(event.guests.map((g) => g.id));
+    const notGuests = allUsers.filter((u) => !guestIds.has(u.id));
+    return (
+      <tr key={event.id}>
+        <td>{event.name}</td>
+        <td>{event.guests.length}</td> {/* Optional: show count of attendees */}
+        <td>
+          <select
+            value={selectedUserIds[event.id] || ""}
+            onChange={(e) =>
+              setSelectedUserIds((prev) => ({
+                ...prev,
+                [event.id]: e.target.value,
+              }))
+            }
+          >
+            <option value="">Select user</option>
+            {notGuests.map((u) => (
+              <option key={u.id} value={u.utorid}>
+                {u.name} ({u.utorid})
+              </option>
+            ))}
+          </select>
+          <button onClick={() => handleAddUser(event.id)}>Add</button>
+        </td>
+        <td>
+          <select
+            value={removeUserIds[event.id] || ""}
+            onChange={(e) =>
+              setRemoveUserIds((prev) => ({
+                ...prev,
+                [event.id]: e.target.value,
+              }))
+            }
+          >
+            <option value="">Select attendee</option>
+            {allUsers
+            .filter((u) => event.guests.some((g) => g.id === u.id))
+            .map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name} ({u.utorid})
+              </option>
+          ))}
+
+          </select>
+          <button onClick={() => handleRemoveUser(event.id)}>Remove</button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
         </table>
 
         <div className="pagination">
