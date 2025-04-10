@@ -43,7 +43,7 @@ export default function RSVPEventsPage() {
 
   const handleRSVP = async (eventId) => {
     try {
-      await axios.post(`http://localhost:8000/events/${eventId}/join`, {}, {
+      await axios.post(`http://localhost:8000/events/${eventId}/guests/me`, {}, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });

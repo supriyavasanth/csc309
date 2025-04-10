@@ -20,33 +20,6 @@ export default function Sidebar() {
       <nav className="nav-links">
         <Link to="/dashboard">Dashboard</Link>
 
-        {(user.role === "CASHIER" || user.role === "MANAGER" || user.role === "SUPERUSER") && (
-          <>
-          <Link to="/transactions">Transaction History</Link>
-          <Link to="/createTransaction">Transaction</Link>
-          <Link to="/processRedemption">Manual Transaction</Link>
-          </>
-        )}
-
-        {(user.role === "MANAGER" || user.role === "SUPERUSER") && (
-          <>
-            <Link to="/users">User Management</Link>
-            <Link to="/userList">User List</Link>
-            <Link to="/promotions">Promotions</Link>
-            <Link to="/createPromotions">Create Promotions</Link>
-            <Link to="/events">Events</Link>
-            <Link to="/createEvents">Create Events</Link>
-            <Link to="/transactionManagement">Transaction Management</Link>
-            <Link to="/promotionManagement">Promotion Management</Link>
-            <Link to="/eventManagement">Event Management</Link>
-            <Link to="/eventUserManagement">Event User Management</Link>
-          </>
-        )}
-
-        {user.role === "REGULAR" && (
-          <Link to="/rewards">My Rewards</Link>
-        )}
-
         <Link to="/profile">Profile</Link>
         <Link to="/points">Points</Link>
         <Link to="/qr">QR Code</Link>
@@ -57,6 +30,30 @@ export default function Sidebar() {
         <Link to="/showEvents">Events</Link>
         <Link to="/RSVP">RSVP</Link>
         <Link to="/transactionHistory">Transaction History</Link>
+
+        
+        {(user.role === "CASHIER" || user.role === "MANAGER" || user.role === "SUPERUSER") && (
+          <>
+          <Link to="/createTransaction">Create Transaction</Link>
+          <Link to="/processRedemption">Manual Redemption</Link>
+          </>
+        )}
+
+        {(user.role === "MANAGER" || user.role === "SUPERUSER") && (
+          <>
+            <Link to="/transactions">Filter Transactions</Link>
+            <Link to="/users">User Management</Link>
+            <Link to="/userList">User List</Link>
+            <Link to="/promotions">Filter Promotions</Link>
+            <Link to="/createPromotions">Create Promotions</Link>
+            <Link to="/events">Filter Events</Link>
+            <Link to="/createEvents">Create Events</Link>
+            <Link to="/transactionManagement">Transaction Management</Link>
+            <Link to="/promotionManagement">Promotion Management</Link>
+            <Link to="/eventManagement">Event Management</Link>
+            <Link to="/eventUserManagement">Event User Management</Link>
+          </>
+        )}
       </nav>
 
       <hr className="divider" />
